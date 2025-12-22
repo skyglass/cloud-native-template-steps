@@ -1,0 +1,55 @@
+apply plugin: EndToEndTestsPlugin
+
+dependencies {
+    testImplementation project(":customer-service:customer-service-api-web")
+    testImplementation project(":order-service:order-service-api-web")
+    testImplementation project(":order-service:order-service-api-messaging")
+    testImplementation project(":api-gateway-service:api-gateway-service-api-web")
+    testImplementation "io.eventuate.examples.common:eventuate-examples-common-money-jakarta9:$eventuateCommonExamplesVersion"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-web"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+    testImplementation "io.eventuate.util:eventuate-util-test"
+
+    // TODO shouldn't need to do this too
+    endToEndTestImplementation "org.testcontainers:testcontainers:$testContainersVersion"
+    endToEndTestImplementation "io.eventuate.platform.testcontainer.support:eventuate-platform-testcontainer-support-service:$eventuatePlatformTestContainerSupportVersion"
+    endToEndTestImplementation "io.eventuate.cdc:eventuate-cdc-testcontainers"
+    endToEndTestImplementation "io.eventuate.common:eventuate-common-testcontainers"
+    endToEndTestImplementation "io.eventuate.messaging.kafka:eventuate-messaging-kafka-testcontainers"
+
+    endToEndTestImplementation "io.rest-assured:rest-assured"
+    endToEndTestImplementation "io.eventuate.common:eventuate-common-json-mapper"
+    endToEndTestImplementation "io.eventuate.examples.spring-authorization-server:authorization-server-test-containers:$eventuateExamplesSpringAuthorizationServerVersion"
+    endToEndTestImplementation "org.springframework.boot:spring-boot-starter-web"
+
+
+}
+
+endToEndTest.dependsOn(":customer-service:customer-service-main:assemble", ":order-service:order-service-main:assemble", ":api-gateway-service:api-gateway-service-main:assemble")
+check.shouldRunAfter(":customer-service:customer-service-main:check")
+check.shouldRunAfter(":order-service:order-service-main:check")
+check.shouldRunAfter(":api-gateway-service:api-gateway-service-main:check")
+
+endToEndTest {
+    if (project.hasProperty('endToEndTestMode')) {
+        systemProperty "endToEndTestMode", endToEndTestMode
+        System.out.println("endToEndTestMode: " + endToEndTestMode)
+    }
+    if (project.hasProperty('endToEndTestHostName')) {
+        environment "DOCKER_HOST_IP", endToEndTestHostName
+        systemProperty "host.name", endToEndTestHostName
+        System.out.println("endToEndTestHostName: " + endToEndTestHostName)
+    }
+}
+
+task runApplication(type: JavaExec) {
+    group = "Execution"
+    description = "Run the application"
+    classpath = sourceSets.endToEndTest.runtimeClasspath
+    mainClass = "io.eventuate.examples.tram.sagas.ordersandcustomers.application.CustomersAndOrdersMain"
+    systemProperty "logback.debug", "true"
+}
+
+runApplication.dependsOn(":customer-service:customer-service-main:assemble", ":order-service:order-service-main:assemble", ":api-gateway-service:api-gateway-service-main:assemble")

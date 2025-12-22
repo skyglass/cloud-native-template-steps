@@ -1,0 +1,94 @@
+spring.application.name: api-gateway
+
+logging.level.io.github.resilience4j: DEBUG
+logging.level.io.eventuate.examples: INFO
+logging.level.org.springframework.web: INFO
+logging.level.org.springframework.security: INFO
+
+spring.sleuth.enabled: true
+spring.sleuth.sampler.probability: 1
+spring.zipkin.base.url: http://${DOCKER_HOST_IP:localhost}:9411/
+
+
+apigateway.timeout.millis: 1000
+
+customer:
+  destinations:
+    customerServiceUrl: http://${DOCKER_HOST_IP:localhost}:8082
+order:
+  destinations:
+    orderServiceUrl: http://${DOCKER_HOST_IP:localhost}:8081
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 1
+      waitDurationInOpenState: 10000
+      failureRateThreshold: 60
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway:
+            provider: uaa
+            client-id: XXX
+            client-secret: XXX
+            authorization-grant-type: password
+            client-authentication-method: basic
+        provider:
+          uaa:
+            token-uri: http://localhost:8444/oauth/token
+            user-info-uri: http://localhost:8444/oauth/user
+            user-name-attribute: user_name
+            user-info-authentication-method: header
+  cloud:
+    gateway:
+      routes:
+        - id: create_customer
+          uri: ${customer.destinations.customerServiceUrl}
+          predicates:
+            - Method=POST
+            - Path=/customers
+          filters:
+            - CircuitBreaker=myCircuitBreaker
+        - id: get_customers
+          uri: ${customer.destinations.customerServiceUrl}
+          predicates:
+            - Method=GET
+            - Path=/customers
+          filters:
+            - CircuitBreaker=myCircuitBreaker
+        - id: get_customer
+          uri: ${customer.destinations.customerServiceUrl}
+          predicates:
+            - Method=GET
+            - Path=/customers
+          filters:
+            - CircuitBreaker=myCircuitBreaker
+        - id: create_order
+          uri: ${order.destinations.orderServiceUrl}
+          predicates:
+            - Method=POST
+            - Path=/orders
+          filters:
+            - CircuitBreaker=myCircuitBreaker
+        - id: get_order
+          uri: ${order.destinations.orderServiceUrl}
+          predicates:
+            - Method=GET
+            - Path=/orders/{orderId}
+          filters:
+            - CircuitBreaker=myCircuitBreaker
+        - id: get_orders
+          uri: ${order.destinations.orderServiceUrl}
+          predicates:
+            - Method=GET
+            - Path=/orders
+          filters:
+            - CircuitBreaker=myCircuitBreaker
+  web:
+    resources:
+      static-locations: classpath:/static,classpath:/META-INF/static-content

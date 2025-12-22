@@ -1,0 +1,21 @@
+apply plugin: IntegrationTestsPlugin
+
+dependencies {
+    implementation project(":customer-service:customer-service-domain")
+
+    implementation "io.eventuate.tram.core:eventuate-tram-spring-flyway"
+    runtimeOnly "io.eventuate.tram.sagas:eventuate-tram-sagas-spring-flyway"
+    runtimeOnly "io.eventuate.common:eventuate-common-jdbc"
+
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    runtimeOnly "org.flywaydb:flyway-core"
+
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.mockito:mockito-core:2.23.0"
+
+    integrationTestImplementation "io.eventuate.common:eventuate-common-testcontainers"
+    // TODO shouldn't need to do this too
+    integrationTestImplementation "org.testcontainers:testcontainers:$testContainersVersion"
+
+}
+
