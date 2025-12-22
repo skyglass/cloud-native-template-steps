@@ -19,3 +19,5 @@ if [ -z "$NO_DELETE" ] ; then
     ./manage/delete-kind-cluster.sh
 fi
 ./manage/create-kind-cluster.sh
+
+./manage/install-infrastructure-services.sh
