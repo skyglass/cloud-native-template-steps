@@ -9,4 +9,4 @@ spec:
         - name: ghcr.io
       containers:
         - name: customer-service
-          image: "ghcr.io/microservices-live-projects/manning-live-project-series-kubernetes/customer-service:0.1.0-SNAPSHOT"
+          image: "ghcr.io/skyglass/cloud-native-template-steps/customer-service:0.1.0-SNAPSHOT"
