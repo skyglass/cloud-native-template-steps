@@ -1,0 +1,61 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service-name: api-gateway-service
+  template:
+    metadata:
+      labels:
+        service-name: api-gateway-service
+    spec:
+      containers:
+        - name: api-gateway-service
+          image: "localhost:5002/api-gateway-service:0.1.0-SNAPSHOT"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+          - name: ORDER_DESTINATIONS_ORDERSERVICEURL
+            value: http://order-service
+
+          - name: CUSTOMER_DESTINATIONS_CUSTOMERSERVICEURL
+            value: http://customer-service
+
+          - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+            value: http://authorization-server:9000
+          
+          - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
+            value: http://authorization-server:9000/oauth2/jwks
+          
+          - name: API_GATEWAY_TOKEN_ENDPOINT
+            value: http://authorization-server:9000/oauth2/token
+          
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+          resources:
+            limits:
+              cpu: 3000m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi

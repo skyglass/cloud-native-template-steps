@@ -23,13 +23,16 @@ jobs:
       with:
         cache-read-only: false
 
+    - name: Install K8s Kind
+      run: sudo ./.github/workflows/install-k8s-tools.sh
+
+    - name: Validate K8S manifests
+      run: ./test/validate-k8s-yaml.sh
+
     - name: Build
       run: |
         cd application
         ./gradlew build
-
-    - name: Install K8s Kind
-      run: sudo ./.github/workflows/install-k8s-tools.sh
 
     - name: Create Kind Cluster
       run: ./manage/create-kind-cluster.sh
@@ -46,6 +49,12 @@ jobs:
     - name: Test Get JWT
       run: ./test/get-jwt.sh
 
+    - name: Test all services
+      run: |
+        ./test/test-all-services.sh
+
+    - name: Undeploy services
+      run: ./manage/undeploy-services.sh
     - name: Delete Kind Cluster
       run: ./manage/delete-kind-cluster.sh
 
