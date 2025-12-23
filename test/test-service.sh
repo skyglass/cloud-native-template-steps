@@ -25,6 +25,8 @@ done
 
 service_name=${1?}
 path=${2?}
+shift
+shift
 
 if [ -z "$service_name" ] ; then
   echo Service name cannot be empty
@@ -107,7 +109,21 @@ service_pod=${service_pod#pod/}
 
 ping_url "$service_pod"
 
-ping_url "$service_pod" "$service_name"
+for ingress_path in "$@" ; do 
+
+    printf "\nTesting ingress path: %s\n\n" "$ingress_path"
+
+    if [ -n "$WITH_AUTH" ] ; then
+      authOpts=("-u" "user:password")
+    else
+      authOpts=()
+    fi
+
+    echo accessing "localhost${path?}" with authOpts "${authOpts[@]}"
+
+    curl "${authOpts[@]}" --retry-connrefused --retry 5 --retry-delay 1 --fail "localhost${ingress_path?}"
+
+done
 
 printf "\nSUCCESS %s\n\n" "$service_name"
 

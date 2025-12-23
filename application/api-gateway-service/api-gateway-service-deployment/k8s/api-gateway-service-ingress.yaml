@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-gateway-service-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /customers
+        pathType: Prefix
+        backend:
+          service:
+            name: api-gateway-service
+            port:
+              name: http
+      - path: /orders
+        pathType: Prefix
+        backend:
+          service:
+            name: api-gateway-service
+            port:
+              name: http
+      - path: /swagger
+        pathType: Prefix
+        backend:
+          service:
+            name: api-gateway-service
+            port:
+              name: http
+      - path: /swagger-ui
+        pathType: Prefix
+        backend:
+          service:
+            name: api-gateway-service
+            port:
+              name: http

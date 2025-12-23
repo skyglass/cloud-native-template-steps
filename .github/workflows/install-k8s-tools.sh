@@ -12,3 +12,11 @@ chmod +x /usr/local/bin/helm
 
 curl -s --location https://github.com/yannh/kubeconform/releases/download/v0.6.6/kubeconform-linux-amd64.tar.gz | tar -C /usr/local/bin -z -xf - kubeconform
 chmod +x /usr/local/bin/kubeconform
+
+curl -SsL https://packages.httpie.io/deb/KEY.gpg | apt-key add -
+curl -SsL -o /etc/apt/sources.list.d/httpie.list https://packages.httpie.io/deb/httpie.list
+apt update
+apt install httpie
+
+apt-get install jq
+

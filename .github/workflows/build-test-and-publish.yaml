@@ -53,6 +53,17 @@ jobs:
       run: |
         ./test/test-all-services.sh
 
+    - name: Install CDC service
+      run: ./manage/install-cdc-service.sh
+
+    - name: End to end tests
+      run: |
+        cd application
+        ./gradlew :end-to-end-tests:cleanEndToEndTest
+        ./gradlew :end-to-end-tests:endToEndTestClasses
+
+        (./gradlew --no-build-cache endToEndTestsUsingKind || ./gradlew --no-build-cache endToEndTestsUsingKind)
+
     - name: Undeploy services
       run: ./manage/undeploy-services.sh
     - name: Delete Kind Cluster
