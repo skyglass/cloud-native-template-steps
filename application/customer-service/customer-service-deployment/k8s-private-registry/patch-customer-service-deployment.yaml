@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-service
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+        - name: ghcr.io
+      containers:
+        - name: customer-service
+          image: "ghcr.io/microservices-live-projects/manning-live-project-series-kubernetes/customer-service:0.1.0-SNAPSHOT"

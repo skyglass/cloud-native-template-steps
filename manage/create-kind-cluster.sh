@@ -74,3 +74,6 @@ fi
 echo
 echo Finished configuration
 echo
+
+"$DIR/create-docker-secret.sh"
+

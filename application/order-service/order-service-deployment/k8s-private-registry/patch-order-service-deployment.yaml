@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+        - name: ghcr.io
+      containers:
+        - name: order-service
+          image: "ghcr.io/microservices-live-projects/manning-live-project-series-kubernetes/order-service:0.1.0-SNAPSHOT"

@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-service
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+        - name: ghcr.io
+      containers:
+        - name: api-gateway-service
+          image: "ghcr.io/microservices-live-projects/manning-live-project-series-kubernetes/api-gateway-service:0.1.0-SNAPSHOT"

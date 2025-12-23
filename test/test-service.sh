@@ -3,11 +3,16 @@
 NO_BUILD=
 WITH_AUTH=
 NO_DELETE=
+KUSTOMIZE_OVERLAY_SUFFIX=
 
 while [[ "$1" == --* ]] ; do
   case $1 in
     "--no-build" )
       NO_BUILD=yes
+      ;;
+    "--private-registry" )
+      NO_BUILD=yes
+      KUSTOMIZE_OVERLAY_SUFFIX=-private-registry
       ;;
     "--with-auth" )
       WITH_AUTH=yes
@@ -70,12 +75,11 @@ ping_url() {
 }
 
 deploy_service() {
-    k8s_dir="application/${service_name}/${service_name}-deployment/k8s"
+    k8s_dir="application/${service_name}/${service_name}-deployment/k8s$KUSTOMIZE_OVERLAY_SUFFIX"
     if [ -z "$NO_DELETE" ] ; then
-      kubectl delete -R -f "$k8s_dir" --wait || echo nothing to delete
+      kubectl delete -k "$k8s_dir" --wait || echo nothing to delete
     fi
-
-    kubectl apply -R -f "$k8s_dir"
+    kubectl apply -k "$k8s_dir"
 }
 
 test_deployment_readiness() {

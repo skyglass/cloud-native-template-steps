@@ -1,4 +1,5 @@
 #! /bin/bash -e
 
-cat $(find application/*/*deployment/k8s -type f) | \
-    kubectl delete -f -
+for dir in application/*-service/*-deployment/k8s ; do
+    kubectl delete -k "$dir" || echo nothing to delete
+done    

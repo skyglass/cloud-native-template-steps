@@ -35,7 +35,12 @@ jobs:
         ./gradlew build
 
     - name: Create Kind Cluster
-      run: ./manage/create-kind-cluster.sh
+      env:
+        GITHUB_USER: skyglass
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
+        ./manage/create-kind-cluster.sh
 
     - name: Test Kind installation
       run: ./test/test-kind-cluster.sh
@@ -68,6 +73,26 @@ jobs:
       run: ./manage/undeploy-services.sh
     - name: Delete Kind Cluster
       run: ./manage/delete-kind-cluster.sh
+
+    - name: Push images
+      env:
+        GITHUB_USER: skyglass
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: ./manage/push-images.sh
+
+    - name: Create Kind Cluster
+      env:
+        GITHUB_USER: skyglass
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
+        ./manage/create-kind-cluster.sh
+
+    - name: Install infrastructure services
+      run: ./manage/install-infrastructure-services.sh
+
+    - name: Test all services
+      run: ./test/test-all-services.sh --private-registry
 
     - name: Save pod logs
       if: ${{ always() }}
