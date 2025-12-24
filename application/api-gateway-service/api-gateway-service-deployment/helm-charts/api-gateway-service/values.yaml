@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: "localhost:5002/api-gateway-service"
+  repository: "ghcr.io/skyglass/cloud-native-template-steps/api-gateway-service"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""

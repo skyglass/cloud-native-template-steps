@@ -5,6 +5,7 @@ WITH_AUTH=
 PRIVATE_REGISTRY=
 
 release_name=
+helm_install_args=()
 
 while [[ "$1" == --* ]] ; do
   case $1 in
@@ -21,6 +22,10 @@ while [[ "$1" == --* ]] ; do
     "--private-registry" )
       NO_BUILD=yes
       PRIVATE_REGISTRY=yes
+      ;;
+    "--chart-version" )
+      helm_install_args=("--version" "${2?}")
+      shift
       ;;
     --*)
       echo bad option "$1" - ./test/test-service-chart.sh '[--no-build]' '[--with-auth]' '[--release-name]' 'service-name' '[ingress-test-path]'
@@ -50,17 +55,15 @@ gradle_build
 echo installing "$service_name"
 
 if [ -n "$PRIVATE_REGISTRY" ] ; then
-  helmOpts=("--set-string" "image.repository=ghcr.io/skyglass/cloud-native-template-steps/${service_name}")
-else
   helmOpts=()
+  chart="oci://ghcr.io/skyglass/cloud-native-template-steps/charts/${service_name?}"
+else
+  helmOpts=("--set-string" "image.repository=localhost:5002/${service_name}")
+  chart="application/$service_name/$service_name-deployment/helm-charts/$service_name"
+  helm dependency update "$chart"
 fi
 
-chart="application/$service_name/$service_name-deployment/helm-charts/$service_name"
-
-helm dependency update "$chart"
-
-helm upgrade --install "$release_name" "$chart" \
-   "${helmOpts[@]}" --wait
+helm upgrade --install "$release_name" "$chart"  "${helm_install_args[@]}"  "${helmOpts[@]}" --wait
 
 kubectl rollout status deployment "$release_name" --timeout=90s
 

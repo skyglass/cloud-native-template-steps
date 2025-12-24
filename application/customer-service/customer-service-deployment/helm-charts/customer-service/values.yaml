@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: "localhost:5002/customer-service"
+  repository: "ghcr.io/skyglass/cloud-native-template-steps/customer-service"
   pullPolicy: IfNotPresent
   tag: ""
 

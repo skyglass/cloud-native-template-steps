@@ -20,6 +20,10 @@ while [[ "$1" == --* ]] ; do
     "--no-delete-existing" )
       NO_DELETE=yes
       ;;
+    "--chart-version" )
+      # ignore
+      shift
+      ;;
     --*)
       echo ./test/test-service.sh --no-build service_name path
       exit 1
