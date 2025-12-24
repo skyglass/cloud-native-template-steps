@@ -59,6 +59,10 @@ jobs:
         ./test/test-service-chart.sh --release-name bar-customer-service customer-service ''
         helm uninstall bar-customer-service
 
+    - name: Test Parameterized Customer Service Helm Chart
+      run: |
+        ./test/test-parameterized-customer-service.sh
+
     - name: Test all services
       run: |
         ./test/test-all-services.sh

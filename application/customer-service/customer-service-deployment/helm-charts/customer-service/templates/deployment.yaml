@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -60,33 +61,37 @@ spec:
                 name: {{ include "customer-service.fullname" . }}-postgres-database-credentials
                 key: password
 
-{{- else -}}
+{{- else }}
 
           - name: SPRING_DATASOURCE_URL
-            value: jdbc:postgresql://customer-service-postgres/customer_service
+            value: jdbc:postgresql://{{ .Values.postgresConnection.endpoint }}/customer_service
 
           - name: SPRING_DATASOURCE_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: customer-service-postgres-database-credentials
-                key: username
-
+            {{- toYaml .Values.postgresConnection.username | nindent  12 }}
 
           - name: SPRING_DATASOURCE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: customer-service-postgres-database-credentials
-                key: password
+            {{- toYaml .Values.postgresConnection.password | nindent  12 }}
+
 {{- end }}
+          {{- with .Values.env }}
+          {{- toYaml . | nindent  10 }}
+          {{- end }}
 
           - name: EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS
+            {{- with .Values.kafka }}
+            {{- with .bootstrapServers }}
+            {{- toYaml . | nindent  12 }}
+            {{- end }}
+            {{- end }}
+            {{- if not (and .Values.kafka .Values.kafka.bootstrapServers) }}
             value: kafka:9092
+            {{- end }}
 
           - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-            value: http://authorization-server:9000
+            value: http://{{ .Values.authorizationServer.endpoint }}
           
           - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
-            value: http://authorization-server:9000/oauth2/jwks
+            value: http://{{ .Values.authorizationServer.endpoint }}/oauth2/jwks
           
           - name: SPRING_SLEUTH_ENABLED
             value: "false"

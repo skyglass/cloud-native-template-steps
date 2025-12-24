@@ -17,7 +17,7 @@ spec:
         - >
             set -o pipefail
 
-            ACCESS_TOKEN=$(curl --fail -X POST -u messaging-client:secret -H 'Content-Type: application/x-www-form-urlencoded' -d "client_id=messaging-client" -d "username=user" -d "password=password" -d "grant_type=password" http://authorization-server:9000/oauth2/token | jq -r '.access_token' )
+            ACCESS_TOKEN=$(curl --fail -X POST -u messaging-client:secret -H 'Content-Type: application/x-www-form-urlencoded' -d "client_id=messaging-client" -d "username=user" -d "password=password" -d "grant_type=password" http://{{ .Values.authorizationServer.endpoint }}/oauth2/token | jq -r '.access_token' )
 
             curl --fail -H "Authorization: Bearer $ACCESS_TOKEN" http://{{ include "customer-service.fullname" . }}:{{ .Values.service.port }}/customers
   restartPolicy: Never

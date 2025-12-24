@@ -82,8 +82,37 @@ tolerations: []
 
 affinity: {}
 
+
 postgres:
   postgresDatabase: customer_service
   persistentStorage: true
-  
+
 postgresEnabled: true
+
+# if postgresEnabled is false need to specify the following:
+
+postgresConnection:
+  endpoint: customer-service-postgres
+  username:
+    valueFrom:
+      secretKeyRef:
+        name: customer-service-postgres-database-credentials
+        key: username
+  password:
+    valueFrom:
+      secretKeyRef:
+        name: customer-service-postgres-database-credentials
+        key: password
+
+# default to kafka:9092 if not specified
+# kafka:
+#  bootstrapServers:
+# Either
+#    value: kafka:9092
+# Or
+#    valueFrom: ...
+
+authorizationServer:
+  endpoint: authorization-server:9000
+
+env: []
