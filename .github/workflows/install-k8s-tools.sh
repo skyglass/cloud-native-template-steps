@@ -20,3 +20,4 @@ apt install httpie
 
 apt-get install jq
 
+curl -s https://fluxcd.io/install.sh | sudo bash
