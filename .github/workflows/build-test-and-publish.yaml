@@ -39,7 +39,7 @@ jobs:
         GITHUB_USER: cer
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
-        export GITHUB_DOCKER_SERVER=ghcr.io/microservices-live-projects
+        export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
         ./manage/create-kind-cluster.sh
 
     - name: Test Kind installation
@@ -85,7 +85,7 @@ jobs:
         GITHUB_USER: cer
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
-        export GITHUB_DOCKER_SERVER=ghcr.io/microservices-live-projects
+        export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
         ./manage/create-kind-cluster.sh
 
     - name: Install infrastructure services
