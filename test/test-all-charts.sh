@@ -1,0 +1,10 @@
+#! /bin/bash -e
+
+./manage/create-kind-cluster.sh
+
+./manage/install-infrastructure-services.sh
+
+./test/test-service-chart.sh api-gateway-service /swagger-ui/index.html
+./test/test-service-chart.sh customer-service /customers
+
+

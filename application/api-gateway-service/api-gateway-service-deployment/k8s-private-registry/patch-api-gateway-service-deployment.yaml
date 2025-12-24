@@ -9,4 +9,4 @@ spec:
         - name: ghcr.io
       containers:
         - name: api-gateway-service
-          image: "ghcr.io/skyglass/cloud-native-template-steps/api-gateway-service:0.1.0-SNAPSHOT"
+          image: "ghcr.io/microservices-live-projects/manning-live-project-series-kubernetes/api-gateway-service:0.1.0-SNAPSHOT"

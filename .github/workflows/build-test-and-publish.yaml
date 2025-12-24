@@ -36,10 +36,10 @@ jobs:
 
     - name: Create Kind Cluster
       env:
-        GITHUB_USER: skyglass
+        GITHUB_USER: cer
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
-        export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
+        export GITHUB_DOCKER_SERVER=ghcr.io/microservices-live-projects
         ./manage/create-kind-cluster.sh
 
     - name: Test Kind installation
@@ -76,22 +76,22 @@ jobs:
 
     - name: Push images
       env:
-        GITHUB_USER: skyglass
+        GITHUB_USER: cer
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: ./manage/push-images.sh
 
     - name: Create Kind Cluster
       env:
-        GITHUB_USER: skyglass
+        GITHUB_USER: cer
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
-        export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
+        export GITHUB_DOCKER_SERVER=ghcr.io/microservices-live-projects
         ./manage/create-kind-cluster.sh
 
     - name: Install infrastructure services
       run: ./manage/install-infrastructure-services.sh
 
-    - name: Test all services
+    - name: Test all services using private registry
       run: ./test/test-all-services.sh --private-registry
 
     - name: Save pod logs
