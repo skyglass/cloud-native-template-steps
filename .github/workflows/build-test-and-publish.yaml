@@ -37,7 +37,7 @@ jobs:
     - name: Create Kind Cluster
       env:
         GITHUB_USER: skyglass
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
         export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
         ./manage/create-kind-cluster.sh
@@ -77,13 +77,13 @@ jobs:
     - name: Push images
       env:
         GITHUB_USER: skyglass
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: ./manage/push-images.sh
 
     - name: Create Kind Cluster
       env:
         GITHUB_USER: skyglass
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
         export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
         ./manage/create-kind-cluster.sh
