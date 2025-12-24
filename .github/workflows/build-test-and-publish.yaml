@@ -53,6 +53,11 @@ jobs:
 
     - name: Test Get JWT
       run: ./test/get-jwt.sh
+      
+    - name: Test Customer Service Helm chart - alt release name
+      run: |
+        ./test/test-service-chart.sh --release-name bar-customer-service customer-service ''
+        helm uninstall bar-customer-service
 
     - name: Test all services
       run: |

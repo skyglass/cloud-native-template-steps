@@ -35,8 +35,6 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
 
           env:
-          - name: SPRING_DATASOURCE_URL
-            value: jdbc:postgresql://customer-service-postgres/customer_service
 
           - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
             value: org.postgresql.Driver
@@ -44,17 +42,42 @@ spec:
           - name: EVENTUATE_DATABASE_SCHEMA
             value: none
 
+
+{{- if .Values.postgresEnabled }}
+
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:postgresql://{{ include "customer-service.fullname" . }}-postgres/customer_service
+
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "customer-service.fullname" . }}-postgres-database-credentials
+                key: username
+
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "customer-service.fullname" . }}-postgres-database-credentials
+                key: password
+
+{{- else -}}
+
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:postgresql://customer-service-postgres/customer_service
+
           - name: SPRING_DATASOURCE_USERNAME
             valueFrom:
               secretKeyRef:
                 name: customer-service-postgres-database-credentials
                 key: username
 
+
           - name: SPRING_DATASOURCE_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: customer-service-postgres-database-credentials
                 key: password
+{{- end }}
 
           - name: EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS
             value: kafka:9092

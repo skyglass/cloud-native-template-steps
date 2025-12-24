@@ -4,10 +4,16 @@ NO_BUILD=
 WITH_AUTH=
 PRIVATE_REGISTRY=
 
+release_name=
+
 while [[ "$1" == --* ]] ; do
   case $1 in
     "--no-build" )
       NO_BUILD=yes
+      ;;
+    "--release-name" )
+      release_name=${2?}
+      shift
       ;;
     "--with-auth" )
       WITH_AUTH=yes
@@ -17,15 +23,19 @@ while [[ "$1" == --* ]] ; do
       PRIVATE_REGISTRY=yes
       ;;
     --*)
-      echo bad option "$1" - ./test/test-service-chart.sh '[--no-build]' '[--no-load]' '[--with-auth]' 'service-name' '[ingress-test-path]'
+      echo bad option "$1" - ./test/test-service-chart.sh '[--no-build]' '[--with-auth]' '[--release-name]' 'service-name' '[ingress-test-path]'
       exit 1
       ;;
   esac
   shift
 done
 
-service_name=${1:-customer-service}    
+service_name=${1?}    
 ingress_test_path=$2
+
+if [ -z "$release_name" ] ; then
+    release_name="$service_name"
+fi
 
 gradle_build() {
     if [ -z "$NO_BUILD" ] ; then
@@ -45,17 +55,21 @@ else
   helmOpts=()
 fi
 
-helm upgrade --install "$service_name" "application/$service_name/$service_name-deployment/helm-charts/$service_name" \
+chart="application/$service_name/$service_name-deployment/helm-charts/$service_name"
+
+helm dependency update "$chart"
+
+helm upgrade --install "$release_name" "$chart" \
    "${helmOpts[@]}" --wait
 
-kubectl rollout status deployment "$service_name" --timeout=90s
+kubectl rollout status deployment "$release_name" --timeout=90s
 
-echo running helm test "$service_name" ...
+echo running helm test "$release_name" ...
 
 SUCCESS=
 
 for i in {1..5}; do
-    if helm test "$service_name" ; then
+    if helm test "$release_name" ; then
         SUCCESS=yes
         break
     fi
@@ -66,7 +80,7 @@ done
 # Don't test again if previously successful
 
 if [ -z "$SUCCESS" ] ; then
-    helm test "$service_name"
+    helm test "$release_name"
 fi
 
 # At this point the service is ready
@@ -85,7 +99,7 @@ if [ -n "$ingress_test_path" ] ; then
     echo accessing ingress "$ingress_test_path" with authOpts "${authOpts[@]}"
 
     for i in {1..5}; do
-        if curl "${authOpts[@]}" --retry-connrefused --retry 5 --retry-delay 1 --fail localhost$ingress_test_path > /dev/null ; then
+        if curl "${authOpts[@]}" --retry-connrefused --retry 5 --retry-delay 1 --fail "localhost$ingress_test_path" > /dev/null ; then
             break
         fi
         echo retrying
@@ -99,8 +113,6 @@ else
 fi
 echo 
 
-
-# for i in {1..5}; do done
 
 echo SUCCESS
 

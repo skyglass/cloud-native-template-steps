@@ -81,3 +81,9 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+postgres:
+  postgresDatabase: customer_service
+  persistentStorage: true
+  
+postgresEnabled: true
