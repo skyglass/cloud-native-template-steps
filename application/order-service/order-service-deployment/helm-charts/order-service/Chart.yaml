@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: 0.1.0-SNAPSHOT
+description: A Helm chart for Kubernetes
+name: order-service
+type: application
+version: 0.1.0
+dependencies: # A list of the chart requirements (optional)
+  - name: postgres
+    version: v0.4.0
+    repository: "@eventuate"
+    condition: postgresEnabled
+
+    

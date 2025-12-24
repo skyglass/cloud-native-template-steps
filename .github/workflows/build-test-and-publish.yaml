@@ -99,6 +99,7 @@ jobs:
       run: |
         ./manage/publish-helm-chart.sh api-gateway-service $HELM_CHART_VERSION 0.1.0-SNAPSHOT
         ./manage/publish-helm-chart.sh customer-service $HELM_CHART_VERSION 0.1.0-SNAPSHOT
+        ./manage/publish-helm-chart.sh order-service $HELM_CHART_VERSION 0.1.0-SNAPSHOT
 
     - name: Create Kind Cluster
       env:

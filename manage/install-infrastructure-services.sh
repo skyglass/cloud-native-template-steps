@@ -7,9 +7,3 @@ helm repo update
 helm upgrade --install kafka eventuate/kafka $HELM_INFRASTRUCTURE_OPTS --wait
 
 helm upgrade --install authorization-server eventuate/authorization-server $HELM_INFRASTRUCTURE_OPTS --wait
-
-helm upgrade --install order-service-postgres eventuate/postgres \
-    $HELM_INFRASTRUCTURE_OPTS \
-    --set postgresDatabase=order_service \
-    --set persistentStorage=false \
-    --wait

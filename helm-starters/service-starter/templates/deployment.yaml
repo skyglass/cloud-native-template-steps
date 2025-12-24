@@ -1,0 +1,129 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "<CHARTNAME>.fullname" . }}
+  labels:
+    {{- include "<CHARTNAME>.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "<CHARTNAME>.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "<CHARTNAME>.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "<CHARTNAME>.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          env:
+
+          - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+            value: org.postgresql.Driver
+
+          - name: EVENTUATE_DATABASE_SCHEMA
+            value: none
+
+
+{{- if .Values.postgresEnabled }}
+
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:postgresql://{{ include "<CHARTNAME>.fullname" . }}-postgres/service_database
+
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "<CHARTNAME>.fullname" . }}-postgres-database-credentials
+                key: username
+
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "<CHARTNAME>.fullname" . }}-postgres-database-credentials
+                key: password
+
+{{- else }}
+
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:postgresql://{{ .Values.postgresConnection.endpoint }}/service_database
+
+          - name: SPRING_DATASOURCE_USERNAME
+            {{- toYaml .Values.postgresConnection.username | nindent  12 }}
+
+          - name: SPRING_DATASOURCE_PASSWORD
+            {{- toYaml .Values.postgresConnection.password | nindent  12 }}
+
+{{- end }}
+          {{- with .Values.env }}
+          {{- toYaml . | nindent  10 }}
+          {{- end }}
+
+          - name: EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS
+            {{- with .Values.kafka }}
+            {{- with .bootstrapServers }}
+            {{- toYaml . | nindent  12 }}
+            {{- end }}
+            {{- end }}
+            {{- if not (and .Values.kafka .Values.kafka.bootstrapServers) }}
+            value: kafka:9092
+            {{- end }}
+
+          - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+            value: http://{{ .Values.authorizationServer.endpoint }}
+          
+          - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
+            value: http://{{ .Values.authorizationServer.endpoint }}/oauth2/jwks
+          
+          - name: SPRING_SLEUTH_ENABLED
+            value: "false"
+ 
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
