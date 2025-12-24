@@ -40,7 +40,7 @@ gradle_build
 echo installing "$service_name"
 
 if [ -n "$PRIVATE_REGISTRY" ] ; then
-  helmOpts=("--set-string" "image.repository=ghcr.io/microservices-live-projects/manning-live-project-series-kubernetes/${service_name}")
+  helmOpts=("--set-string" "image.repository=ghcr.io/skyglass/cloud-native-template-steps/${service_name}")
 else
   helmOpts=()
 fi
