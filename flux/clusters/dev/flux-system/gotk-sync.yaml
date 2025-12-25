@@ -8,7 +8,7 @@ metadata:
 spec:
   interval: 1m0s
   ref:
-    branch: lp-3-m1-config
+    branch: config
   secretRef:
     name: flux-system
   url: ssh://git@github.com/skyglass/cloud-native-template-steps
