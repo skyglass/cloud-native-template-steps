@@ -1,0 +1,103 @@
+name: Deploy Configuration to Kubernetes
+
+on:
+  push:
+    branches:
+      - 'lp-3-config'
+      - 'lp-3-m*-config'
+
+jobs:
+  deploy-config-to-kubernetes:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout config
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        java-package: jdk
+        distribution: corretto
+
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        cache-read-only: false
+
+    - name: Create worktree
+      run: |
+        git worktree add app $(git rev-parse --abbrev-ref HEAD | sed -e 's/-config//')
+        ln -s app/application application
+        
+    - name: Install K8s Kind
+      run: |
+        sudo ./.github/workflows/install-k8s-tools.sh
+
+    - name: Validate K8S manifests
+      run: ./app/test/validate-k8s-yaml.sh flux
+
+    - name: Create Kind Cluster
+      env:
+        GITHUB_USER: skyglass
+        GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
+      run: |
+        export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
+        ./manage/create-kind-cluster.sh
+
+    - name: Install Flux
+      run: |
+        sudo ./.github/workflows/install-flux-tools.sh
+
+    - name: set build env
+      run: |
+        BUILD_DATE=$(date -u +'%Y%m%d%H%M%S')
+        echo "BUILD_DATE=${BUILD_DATE}" >> "$GITHUB_ENV"
+        echo "TMP_BRANCH=tmp-branch-${BUILD_DATE}" >> "$GITHUB_ENV"
+        echo "VERSION=0.1.0-BUILD.${BUILD_DATE?}" >> "$GITHUB_ENV"
+
+    - name: create temp branch
+      run: |
+        git checkout -b "${TMP_BRANCH?}"
+        git push -u origin "${TMP_BRANCH?}"
+
+    - name: Bootstrap flux
+      env:
+        GITHUB_USER: skyglass
+        GITHUB_TOKEN: ${{ secrets.PAT_LP_PACKAGE_ACCESS }}
+      run: |
+        export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
+        ./manage/bootstrap-flux.sh --branch "${TMP_BRANCH?}"
+        git pull
+
+    - name: Wait for services to deploy
+      run: |
+        ./manage/wait-for-ready-pod.sh kafka default
+        ./manage/wait-for-ready-pod.sh authorization-server default
+
+    - name: Delete temp branch
+      run: |
+        git push --delete origin "${TMP_BRANCH?}"
+
+    - name: Save pod logs
+      if: ${{ always() }}
+      run: ./.github/workflows/dump-k8s.sh
+      
+    - name: Save container logs
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: container-logs
+        path: ~/container-logs
+
+    - name: Save test results
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-reports
+        path: |
+          **/build/reports
+          **/build/test-results

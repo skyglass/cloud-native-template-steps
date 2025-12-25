@@ -1,8 +1,0 @@
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'org.eclipse.jgit:org.eclipse.jgit.pgm:6.5.0.202303070854-r'
-
-}

@@ -14,7 +14,12 @@ reg_name="registry"
 if docker ps --format '{{.Names}}' | grep -E "^${reg_name}\$" ; then
   echo registry container already exists
 else
-  (cd application ; ./gradlew :api-gateway-service:api-gateway-service-main:startDockerRegistry)
+  if [ -d application ] ; then
+    APPLICATION_DIR=application
+  else
+    APPLICATION_DIR=../application
+  fi
+  (cd "$APPLICATION_DIR" ; ./gradlew :api-gateway-service:api-gateway-service-main:startDockerRegistry)
 fi
 
 if kind get clusters | grep -E "^$CLUSTER_NAME$" ; then

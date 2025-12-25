@@ -1,0 +1,9 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: eventuate
+  namespace: default
+spec:
+  interval: 60s
+  url: https://raw.githubusercontent.com/eventuate-platform/eventuate-helm-charts/helm-repository

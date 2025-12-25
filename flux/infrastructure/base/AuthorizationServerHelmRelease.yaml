@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: authorization-server
+  namespace: default
+spec:
+  chart:
+    spec:
+      chart: authorization-server
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: eventuate
+      version: "v0.4.0"
+  interval: 15s

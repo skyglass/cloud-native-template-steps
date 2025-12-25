@@ -9,15 +9,15 @@ if [ -z "$SELECTOR" ] ; then
 fi
 
 test_pod_readiness() {
-  kubectl wait --namespace ${NAMESPACE?} \
+  kubectl wait --namespace "${NAMESPACE?}" \
     --for=condition=ready pod \
     --selector=${SELECTOR?} \
     --timeout=0s
 }
 
-echo -n waiting for ${NAME?}..
+# echo -n waiting for ${NAME?}..
 
-for i in $(seq 1 100); do
+for _ in $(seq 1 100); do
   if test_pod_readiness ; then
     break;
   fi
@@ -27,5 +27,5 @@ done
 
 test_pod_readiness
 
-echo found ${NAME?}
+echo found "${NAME?}"
 
