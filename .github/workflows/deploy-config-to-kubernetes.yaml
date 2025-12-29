@@ -68,8 +68,8 @@ jobs:
 
     - name: Configure Git
       run: |
-        git config --global user.email "chris@chrisrichardson.net"
-        git config --global user.name "Chris Richardson"
+        git config --global user.email "skyglass@skycomposer.net"
+        git config --global user.name "Michael Glass"
 
     - name: Bootstrap flux
       env:
