@@ -48,21 +48,6 @@ EOF
 
 fi
 
-
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-
-while [ -z "$(kubectl get po --namespace ingress-nginx --selector=app.kubernetes.io/component=controller -oname)" ] ; do
-  echo waiting for ingress-controller
-  sleep 1
-done
-
-echo found ingress-controller
-
-kubectl wait --namespace ingress-nginx \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
-  --timeout=90s
-
 REGISTRY_DIR="/etc/containerd/certs.d/localhost:${reg_port}"
 for node in $(kind get nodes --name lp-cluster); do
   echo configuring $node
@@ -79,6 +64,4 @@ fi
 echo
 echo Finished configuration
 echo
-
-"$DIR/create-docker-secret.sh"
 

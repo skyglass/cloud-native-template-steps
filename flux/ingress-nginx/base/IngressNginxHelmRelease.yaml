@@ -1,0 +1,28 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+spec:
+  chart:
+    spec:
+      chart: ingress-nginx
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx
+  interval: 15s
+  targetNamespace: ingress-nginx
+  values:
+    controller:
+      hostPort:
+        enabled: true
+      service:
+        type: NodePort
+      metrics:
+        enabled: true
+      podAnnotations:
+        "prometheus.io/scrape": true
+        "prometheus.io/port": 10254
+

@@ -6,10 +6,12 @@ on:
       - 'lp-3-config'
       - 'lp-3-m*-config'
 
+
+
 jobs:
   deploy-config-to-kubernetes:
 
-    runs-on: ubuntu-latest
+    runs-on: even-bigger-runner
 
     steps:
     - name: Checkout config
@@ -42,7 +44,7 @@ jobs:
 
     - name: Create Kind Cluster
       env:
-        GITHUB_USER: skyglass
+        GITHUB_USER: cer
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
         export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
@@ -64,12 +66,21 @@ jobs:
         git checkout -b "${TMP_BRANCH?}"
         git push -u origin "${TMP_BRANCH?}"
 
+    - name: Configure Git
+      run: |
+        git config --global user.email "chris@chrisrichardson.net"
+        git config --global user.name "Chris Richardson"
+
     - name: Bootstrap flux
       env:
-        GITHUB_USER: skyglass
+        GITHUB_USER: cer
         GITHUB_TOKEN: ${{ secrets.PAT_LP_PACKAGE_ACCESS }}
       run: |
         export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
+        export AGE_KEY=~/age.agekey
+
+        age-keygen -o ${AGE_KEY?}
+
         ./manage/bootstrap-flux.sh --branch "${TMP_BRANCH?}"
         git pull
 
@@ -77,6 +88,13 @@ jobs:
       run: |
         ./manage/wait-for-ready-pod.sh kafka default
         ./manage/wait-for-ready-pod.sh authorization-server default
+        ./manage/wait-for-ready-pod.sh customer-service default
+        ./manage/wait-for-ready-pod.sh order-service default
+        ./manage/wait-for-ready-pod.sh api-gateway-service default
+        ./manage/wait-for-ready-pod.sh eventuate-cdc default
+
+    - name: Run end to end tests
+      run: ./test/run-end-to-end-tests.sh
 
     - name: Delete temp branch
       run: |

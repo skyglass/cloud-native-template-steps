@@ -19,9 +19,17 @@ done
 
 "$DIR"/create-kind-cluster.sh
 
+git pull
+
+$DIR/encrypt-secrets.sh
+
+git push
+
 flux bootstrap github \
+  --owner="${GITHUB_USER?}" \
   --repository=skyglass/cloud-native-template-steps \
   --branch="${BRANCH}" \
   --path=./flux/clusters/dev \
   --timeout 10m \
   --personal
+

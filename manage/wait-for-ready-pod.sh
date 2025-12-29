@@ -11,13 +11,13 @@ fi
 test_pod_readiness() {
   kubectl wait --namespace "${NAMESPACE?}" \
     --for=condition=ready pod \
-    --selector=${SELECTOR?} \
+    --selector="${SELECTOR?}" \
     --timeout=0s
 }
 
 # echo -n waiting for ${NAME?}..
 
-for _ in $(seq 1 100); do
+for _ in $(seq 1 1200); do
   if test_pod_readiness ; then
     break;
   fi
