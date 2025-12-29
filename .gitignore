@@ -53,5 +53,6 @@ target/
 .project
 .springBeans
 src/main/resources/static/
+secrets/
 
 ### Test ##

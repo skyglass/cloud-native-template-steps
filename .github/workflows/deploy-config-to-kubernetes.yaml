@@ -11,7 +11,7 @@ on:
 jobs:
   deploy-config-to-kubernetes:
 
-    runs-on: even-bigger-runner
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout config
@@ -44,7 +44,7 @@ jobs:
 
     - name: Create Kind Cluster
       env:
-        GITHUB_USER: cer
+        GITHUB_USER: skyglass
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
         export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
@@ -73,7 +73,7 @@ jobs:
 
     - name: Bootstrap flux
       env:
-        GITHUB_USER: cer
+        GITHUB_USER: skyglass
         GITHUB_TOKEN: ${{ secrets.PAT_LP_PACKAGE_ACCESS }}
       run: |
         export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
