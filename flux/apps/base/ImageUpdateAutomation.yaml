@@ -1,0 +1,23 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: default-update-automation
+  # It only looks for updates in its namespace
+  namespace: default
+spec:
+  interval: 15s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  git:
+    # specifying checkout/commit branches here prevents testing on a test-branch
+    commit:
+      author:
+        email: skyglass+fluxcdbot@skycomposer.net
+        name: fluxcdbot
+      messageTemplate: '{{range .Updated.Images}}{{println .}}{{end}}'
+  update:
+    path: ./flux/apps
+    strategy: Setters

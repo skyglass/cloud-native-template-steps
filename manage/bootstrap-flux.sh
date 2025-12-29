@@ -21,11 +21,13 @@ done
 
 git pull
 
-$DIR/encrypt-secrets.sh
+"$DIR/encrypt-secrets.sh"
 
 git push
 
 flux bootstrap github \
+  --components-extra=image-reflector-controller,image-automation-controller \
+  --read-write-key \
   --owner="${GITHUB_USER?}" \
   --repository=skyglass/cloud-native-template-steps \
   --branch="${BRANCH}" \
