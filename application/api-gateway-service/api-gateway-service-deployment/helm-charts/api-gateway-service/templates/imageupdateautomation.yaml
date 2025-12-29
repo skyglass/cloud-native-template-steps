@@ -1,0 +1,28 @@
+{{- if .Values.imageUpdateAutomation.enabled -}}
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: {{ include "api-gateway-service.fullname" . }}-image-policy
+  namespace: default
+spec:
+  imageRepositoryRef:
+    name: {{ include "api-gateway-service.fullname" . }}-image-repo
+  {{- with .Values.imageUpdateAutomation.policy }}
+  policy:
+  {{- toYaml . | nindent 4 }}    
+  {{- end }}
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: {{ include "api-gateway-service.fullname" . }}-image-repo
+  namespace: default
+spec:
+  image: {{ .Values.imageUpdateAutomation.image }}
+  interval: 15s
+  secretRef:
+    name: ghcr.io
+{{- end }}
+    

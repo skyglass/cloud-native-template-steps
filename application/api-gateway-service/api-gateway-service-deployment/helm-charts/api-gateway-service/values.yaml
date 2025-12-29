@@ -100,3 +100,10 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+imageUpdateAutomation:
+  enabled: false
+  # Required when enabled
+  # policy:
+  #   semver:
+  #     range: ">0.1.0-BUILD <0.2.0-BUILD"
