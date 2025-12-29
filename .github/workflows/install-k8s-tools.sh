@@ -21,3 +21,7 @@ apt install httpie
 apt-get install jq
 
 curl -s https://fluxcd.io/install.sh | sudo bash
+
+curl -SsL https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.20.5/kubeseal-0.20.5-linux-amd64.tar.gz | \
+    tar -xvzf - kubeseal
+sudo install -m 755 kubeseal /usr/local/bin/kubeseal

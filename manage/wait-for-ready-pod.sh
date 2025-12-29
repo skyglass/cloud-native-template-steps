@@ -17,8 +17,8 @@ test_pod_readiness() {
 
 echo -n waiting for ${NAME?}..
 
-for i in $(seq 1 100); do
-  if test_pod_readiness ; then
+for i in $(seq 1 1200); do
+  if test_pod_readiness > /dev/null 2>&1 ; then
     break;
   fi
   echo -n .
