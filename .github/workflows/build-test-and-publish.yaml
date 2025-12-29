@@ -39,7 +39,7 @@ jobs:
 
     - name: Create Kind Cluster
       env:
-        GITHUB_USER: cer
+        GITHUB_USER: skyglass
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
         export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
@@ -88,13 +88,13 @@ jobs:
 
     - name: Push images
       env:
-        GITHUB_USER: cer
+        GITHUB_USER: skyglass
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: ./manage/push-images.sh
 
     - name: Publish Helm Charts
       env: 
-        GITHUB_USER: cer
+        GITHUB_USER: skyglass
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
         ./manage/publish-helm-chart.sh api-gateway-service $HELM_CHART_VERSION 0.1.0-SNAPSHOT
@@ -103,7 +103,7 @@ jobs:
 
     - name: Create Kind Cluster
       env:
-        GITHUB_USER: cer
+        GITHUB_USER: skyglass
         GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
         export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
