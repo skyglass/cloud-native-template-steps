@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: api-gateway-service
-      version: "$imagepolicy:default:api-gateway-service-image-policy:tag"
+      version: {"$imagepolicy": "default:api-gateway-service-image-policy:tag"}
       sourceRef:
         kind: HelmRepository
         name: application

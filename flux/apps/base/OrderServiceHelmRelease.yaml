@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: application
-      version: "$imagepolicy:default:order-service-image-policy:tag"
+      version: {"$imagepolicy": "default:order-service-image-policy:tag"}
   interval: 15s
   values:
     imageUpdateAutomation:
