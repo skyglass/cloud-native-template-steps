@@ -18,10 +18,10 @@ spec:
         email: skyglass+fluxcdbot@skycomposer.net
         name: fluxcdbot
       messageTemplate: |
-        Update image versions
-        {{ range $k, $v := .Changed }}
-        - {{ $k }}: {{ $v }}
-        {{ end }}
+        Update Helm chart versions
+        
+        {{ toYaml .Changed }}
+
   update:
     path: ./flux/apps
     strategy: Setters
