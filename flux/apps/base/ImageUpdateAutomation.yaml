@@ -17,7 +17,11 @@ spec:
       author:
         email: skyglass+fluxcdbot@skycomposer.net
         name: fluxcdbot
-      messageTemplate: '{{range .Changed.Images}}{{println .}}{{end}}'
+      messageTemplate: |
+        Update image versions
+        {{ range $k, $v := .Changed }}
+        - {{ $k }}: {{ $v }}
+        {{ end }}
   update:
     path: ./flux/apps
     strategy: Setters
