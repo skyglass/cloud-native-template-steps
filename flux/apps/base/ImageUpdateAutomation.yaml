@@ -18,9 +18,7 @@ spec:
         email: skyglass+fluxcdbot@skycomposer.net
         name: fluxcdbot
       messageTemplate: |
-        Update Helm chart versions
-        
-        {{ toYaml .Changed }}
+        Update Helm chart versions via Flux
 
   update:
     path: ./flux/apps
