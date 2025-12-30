@@ -17,7 +17,7 @@ spec:
       author:
         email: skyglass+fluxcdbot@skycomposer.net
         name: fluxcdbot
-      messageTemplate: '{{range .Updated.Images}}{{println .}}{{end}}'
+      messageTemplate: '{{range .Changed.Images}}{{println .}}{{end}}'
   update:
     path: ./flux/apps
     strategy: Setters
