@@ -4,6 +4,8 @@ metadata:
   name: ingress-nginx
   namespace: default
 spec:
+  dependsOn:
+    - name: infrastructure
   interval: 30s
   sourceRef:
     kind: GitRepository
