@@ -35,14 +35,14 @@ jobs:
 
     - name: Push images
       env:
-        GITHUB_USER: cer
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_USER: skyglass
+        GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: ./manage/push-images.sh ${VERSION?}
 
     - name: Publish Helm Charts
       env: 
-        GITHUB_USER: cer
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_USER: skyglass
+        GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
       run: |
         helm repo add eventuate https://raw.githubusercontent.com/eventuate-platform/eventuate-helm-charts/helm-repository
         ./manage/publish-helm-chart.sh api-gateway-service ${VERSION?} ${VERSION?}
