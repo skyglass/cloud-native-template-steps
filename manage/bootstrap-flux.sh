@@ -1,6 +1,7 @@
 #! /bin/bash -e
 
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
+CLUSTER_NAME=dev
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 while [ ! -z "$*" ] ; do
@@ -8,6 +9,10 @@ while [ ! -z "$*" ] ; do
     "--branch" )
       shift
       BRANCH=$1
+      ;;
+    "--cluster" )
+      shift
+      CLUSTER_NAME=$1
       ;;
     * )
       echo ./bootstrap-flux.sh --branch branchName
@@ -17,11 +22,17 @@ while [ ! -z "$*" ] ; do
   shift
 done
 
-"$DIR"/create-kind-cluster.sh
+if [ "$CLUSTER_NAME" == "dev" ] ; then
+  CREATE_ARGS=()
+else
+  CREATE_ARGS=("--cluster" "lp-cluster-$CLUSTER_NAME" "--port" 88)
+fi
+
+"$DIR/create-kind-cluster.sh" "${CREATE_ARGS[@]}"
 
 git pull
 
-"$DIR/encrypt-secrets.sh"
+"$DIR/encrypt-secrets.sh"  "${CLUSTER_NAME}"
 
 git push
 
@@ -30,8 +41,8 @@ flux bootstrap github \
   --read-write-key \
   --owner="${GITHUB_USER?}" \
   --repository=skyglass/cloud-native-template-steps \
-  --branch="${BRANCH}" \
-  --path=./flux/clusters/dev \
+  "--branch=${BRANCH}" \
+  "--path=./flux/clusters/${CLUSTER_NAME}" \
   --timeout 10m \
   --personal
 

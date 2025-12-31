@@ -71,30 +71,51 @@ jobs:
         git config --global user.email "skyglass@skycomposer.net"
         git config --global user.name "Michael Glass"
 
+    - name: setup age
+      run: |
+        AGE_KEY_DIR=~/age-keys
+        mkdir -p ${AGE_KEY_DIR?}
+
+        age-keygen -o ${AGE_KEY_DIR?}/dev
+        age-keygen -o ${AGE_KEY_DIR?}/production
+
+        echo "AGE_KEY_DIR=${AGE_KEY_DIR}" >> "$GITHUB_ENV"
+  
     - name: Bootstrap flux
       env:
         GITHUB_USER: skyglass
         GITHUB_TOKEN: ${{ secrets.PAT_LP_PACKAGE_ACCESS }}
       run: |
         export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
-        export AGE_KEY=~/age.agekey
-
-        age-keygen -o ${AGE_KEY?}
-
         ./manage/bootstrap-flux.sh --branch "${TMP_BRANCH?}"
         git pull
 
     - name: Wait for services to deploy
-      run: |
-        ./manage/wait-for-ready-pod.sh kafka default
-        ./manage/wait-for-ready-pod.sh authorization-server default
-        ./manage/wait-for-ready-pod.sh customer-service default
-        ./manage/wait-for-ready-pod.sh order-service default
-        ./manage/wait-for-ready-pod.sh api-gateway-service default
-        ./manage/wait-for-ready-pod.sh eventuate-cdc default
+      run: ./manage/wait-for-ready-pods.sh
 
     - name: Run end to end tests
       run: ./test/run-end-to-end-tests.sh
+
+    - name: Delete Kind Cluster
+      run: ./manage/delete-kind-cluster-dev.sh
+
+    - name: Bootstrap flux production
+      env:
+        GITHUB_USER: skyglass
+        GITHUB_TOKEN: ${{ secrets.PAT_LP_PACKAGE_ACCESS }}
+      run: |
+        git pull
+        export GITHUB_DOCKER_SERVER=ghcr.io/skyglass/cloud-native-template-steps
+
+        ./manage/bootstrap-flux-production.sh --branch "${TMP_BRANCH?}"
+        git pull
+
+    - name: Wait for services to deploy production
+      run: ./manage/wait-for-ready-pods.sh
+
+    - name: Run end to end tests production
+      run: |
+        ./test/run-production-end-to-end-tests.sh
 
     - name: Delete temp branch
       run: |

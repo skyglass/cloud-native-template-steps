@@ -1,0 +1,11 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: api-gateway-service
+  namespace: default
+spec:
+  values:
+    replicaCount: 2
+  chart:
+    spec:
+      version: 0.1.0-BUILD.20231029232711

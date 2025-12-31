@@ -2,17 +2,26 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+set -o pipefail
+
 while [ -n "$*" ] ; do
   case $1 in
-    *)
-      echo unknown "$1" - './encrypt-secrets.sh'
-      exit 1
+    --*)
+      echo unknown "$1" - './encrypt-secrets.sh [cluster]'
       ;;
+    *)
+      break
+      ;;
+
   esac
   shift
 done
 
-ENCRYPTED_SECRET=flux/apps/base/encrypted-docker-secret.yaml
+CLUSTER_NAME=${1:-dev}
+
+ENCRYPTED_GITHUB_TOKEN=flux/apps/${CLUSTER_NAME}/encrypted-github-docker.yaml
+ENCRYPTED_DOCKER_SECRET=flux/apps/${CLUSTER_NAME}/encrypted-docker-secret.yaml
+AGE_KEY=${AGE_KEY_DIR?}/${CLUSTER_NAME}
 
 PUBLIC_KEY=$(sed -e '/public key:/!d' -e 's/.*public key: //' < "${AGE_KEY?}")
 
@@ -28,12 +37,21 @@ kubectl create secret -n default docker-registry ghcr.io \
     --docker-password="${GITHUB_TOKEN?}" \
     --dry-run=client \
     -o yaml \
-    > $ENCRYPTED_SECRET
+    > "$ENCRYPTED_DOCKER_SECRET"
 
 
 sops --age="$PUBLIC_KEY" \
---encrypt --encrypted-regex '^(data|stringData)$' --in-place $ENCRYPTED_SECRET
+  --encrypt --encrypted-regex '^(data|stringData)$' --in-place "$ENCRYPTED_DOCKER_SECRET"
 
-git add $ENCRYPTED_SECRET
-git commit -m "Updated secret" $ENCRYPTED_SECRET || echo nothing to commit
+kubectl create secret generic github-token \
+    --from-literal=token="${GITHUB_TOKEN}" \
+    --dry-run=client \
+    -o yaml \
+    > "$ENCRYPTED_GITHUB_TOKEN"
 
+sops --age="$PUBLIC_KEY" \
+  --encrypt --encrypted-regex '^(data|stringData)$' --in-place "$ENCRYPTED_GITHUB_TOKEN"
+
+git add "$ENCRYPTED_GITHUB_TOKEN" "$ENCRYPTED_DOCKER_SECRET" 
+
+git commit -m "Updated secret" "$ENCRYPTED_GITHUB_TOKEN" "$ENCRYPTED_DOCKER_SECRET" || echo nothing to commit

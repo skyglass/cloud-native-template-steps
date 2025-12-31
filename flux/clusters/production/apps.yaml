@@ -9,13 +9,11 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
-  dependsOn:
-    - name: infrastructure
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./flux/apps/dev
+  path: ./flux/apps/production
   prune: true
   wait: true
-  timeout: 240s
+  timeout: 600s

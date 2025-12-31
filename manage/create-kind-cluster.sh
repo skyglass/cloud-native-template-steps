@@ -3,6 +3,26 @@
 set -o pipefail
 
 CLUSTER_NAME=lp-cluster
+HOST_PORT=80
+
+while [ ! -z "$*" ] ; do
+  case $1 in
+    "--cluster" )
+      shift
+      CLUSTER_NAME=$1
+      ;;
+    "--port" )
+      shift
+      HOST_PORT=$1
+      ;;
+    * )
+      echo ./create-kind-cluster.sh --cluster name
+      exit 0
+      ;;
+  esac
+  shift
+done
+
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -24,6 +44,7 @@ fi
 
 if kind get clusters | grep -E "^$CLUSTER_NAME$" ; then
   echo cluster $CLUSTER_NAME already exists
+  kubectl config use-context kind-$CLUSTER_NAME
 else
   cat <<EOF | kind create cluster --name $CLUSTER_NAME --config=-
   kind: Cluster
@@ -42,7 +63,7 @@ else
           node-labels: "ingress-ready=true"
     extraPortMappings:
     - containerPort: 80
-      hostPort: 80
+      hostPort: $HOST_PORT
       protocol: TCP
 EOF
 
