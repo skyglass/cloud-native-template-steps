@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+    token: ENC[AES256_GCM,data:c/Iuz+C4YF+hywnfhHGCaG0cOZyzI3FVQHO0y3VkJRNC2obFHTcwNq7vmkSXO/f/8FqjxgSA8tg=,iv:3HvB3+w73LwF9gyfp+lDbJ7YZ0FfVEHYpJfLHIiLdMs=,tag:Hk+YMqgX2KWl3j7Rz4It9Q==,type:str]
+kind: Secret
+metadata:
+    name: github-token
+sops:
+    age:
+        - recipient: age1tp8dzw8qevk4ez9spk6frm2hld8ka8gld5drw283h4yyutjkqqfqfavj7k
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAwZHowcXJqSzBCYkV1Qmlo
+            bHlXYzBIbWVNTnB2d3pnR1d4T2R3c3JxQm1JCjVCbk50bzZVbkQvdXVVYndXMkls
+            SXlSb2VnNGh4bERBeWpqdjFyMFM1THMKLS0tIHQ5RE9yajQ3a0lYeHZycGJkaklY
+            c1d4cmV6a2NBZ3huR0hLTzRSNjdFV0kKgeL3nmHfINOiPyF561CBJ4e8Wc09sYqB
+            oG/V0b4XQc+kVSnmnbF5jO7XGaBa+eT08HTJlhjacKtAtKU9sJgPOg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-01-01T15:16:17Z"
+    mac: ENC[AES256_GCM,data:z3EN/JC+RUVRgcgJVqv/Bap0So3RvYcAGPBahKMkoNFrSLTzAh3wYDFJNeJ8LqLzw4lcoc+VibbdJk5RRICuH6SCKAa8ae5fk12QygGYriFIp3AQnSN6KoaR6HRvmUyTmeEMw6khBB2NbpcA8UB790+RxkNu72wSiab45rvi/QQ=,iv:xXWUOjsocu16zlzLvT6VrbubyGTVbNpM5VsOVfNX3z4=,tag:hZJIkRUeBNmVs2QCgrcI3A==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0
