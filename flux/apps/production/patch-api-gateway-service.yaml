@@ -6,6 +6,3 @@ metadata:
 spec:
   values:
     replicaCount: 2
-  chart:
-    spec:
-      version: 0.1.0-BUILD.20260101090425
