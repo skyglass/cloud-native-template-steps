@@ -21,7 +21,7 @@ CLUSTER_NAME=${1:-dev}
 
 ENCRYPTED_GITHUB_TOKEN=flux/apps/${CLUSTER_NAME}/encrypted-github-docker.yaml
 ENCRYPTED_DOCKER_SECRET=flux/apps/${CLUSTER_NAME}/encrypted-docker-secret.yaml
-AGE_KEY=${AGE_KEY_DIR?}/${CLUSTER_NAME}
+AGE_KEY=${AGE_KEY_DIR?}/${CLUSTER_NAME}/keys.txt
 
 PUBLIC_KEY=$(sed -e '/public key:/!d' -e 's/.*public key: //' < "${AGE_KEY?}")
 
@@ -52,6 +52,6 @@ kubectl create secret generic github-token \
 sops --age="$PUBLIC_KEY" \
   --encrypt --encrypted-regex '^(data|stringData)$' --in-place "$ENCRYPTED_GITHUB_TOKEN"
 
-git add "$ENCRYPTED_GITHUB_TOKEN" "$ENCRYPTED_DOCKER_SECRET" 
+git add "$ENCRYPTED_GITHUB_TOKEN" "$ENCRYPTED_DOCKER_SECRET"
 
 git commit -m "Updated secret" "$ENCRYPTED_GITHUB_TOKEN" "$ENCRYPTED_DOCKER_SECRET" || echo nothing to commit

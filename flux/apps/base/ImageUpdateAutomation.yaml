@@ -19,14 +19,6 @@ spec:
         name: fluxcdbot
       messageTemplate: |
         Update Helm chart versions via Flux
-
-        {{- range $path, $changes := .Changed }}
-        {{- range $obj, $list := $changes }}
-        {{- range $list }}
-        - {{ $path }}: {{ .Old }} → {{ .New }} ({{ .Policy }})
-        {{- end }}
-        {{- end }}
-        {{- end }}
   update:
     path: ./flux/apps
     strategy: Setters
