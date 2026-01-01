@@ -107,3 +107,7 @@ imageUpdateAutomation:
   # policy:
   #   semver:
   #     range: ">0.1.0-BUILD <0.2.0-BUILD"
+
+helmAlert:
+  enabled: false
+  provider: github  

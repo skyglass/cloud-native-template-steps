@@ -1,0 +1,17 @@
+{{- if .Values.helmAlert.enabled -}}
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: {{ include "customer-service.fullname" . }}-dispatch
+  namespace: default
+spec:
+  providerRef:
+    name: {{ .Values.helmAlert.provider }}
+  summary: "env=dev"
+  eventSeverity: info
+  eventSources:
+    - kind: HelmRelease
+      name:  {{ include "customer-service.fullname" . }}
+  inclusionList:
+    - ".*.upgrade.*succeeded.*"
+{{- end }}
