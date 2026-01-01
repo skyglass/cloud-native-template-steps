@@ -1,11 +1,9 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: api-gateway-service
+  name: customer-service
   namespace: default
 spec:
   chart:
     spec:
       version: "0.1.0-BUILD.20260101133914"
-  values:
-    replicaCount: 2

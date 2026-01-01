@@ -7,4 +7,3 @@ resources:
   - CustomerServiceHelmRelease.yaml
   - OrderServiceHelmRelease.yaml
   - EventuateCdcHelmRelease.yaml
-  - ImageUpdateAutomation.yaml

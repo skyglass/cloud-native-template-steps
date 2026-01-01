@@ -15,10 +15,3 @@ spec:
         kind: HelmRepository
         name: application
   interval: 15s
-  values:
-    imageUpdateAutomation:
-      enabled: true
-      image: ghcr.io/skyglass/cloud-native-template-steps/charts/api-gateway-service
-      policy:
-        semver:
-          range: ">0.1.0-BUILD <0.2.0-BUILD"

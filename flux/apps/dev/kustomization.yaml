@@ -3,5 +3,11 @@ kind: Kustomization
 namespace: default
 resources:
   - ../base
+  - ImageUpdateAutomation.yaml
   - ./encrypted-github-docker.yaml
   - ./encrypted-docker-secret.yaml
+  - ./HelmReleaseEventPublishingProvider.yaml
+patches:
+  - path: ./patch-api-gateway-service.yaml
+  - path: ./patch-customer-service.yaml
+  - path: ./patch-order-service.yaml
