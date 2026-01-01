@@ -22,10 +22,10 @@ while [ ! -z "$*" ] ; do
   shift
 done
 
-if [ "$CLUSTER_NAME" == "dev" ] ; then
-  CREATE_ARGS=()
-else
-  CREATE_ARGS=("--cluster" "lp-cluster-$CLUSTER_NAME" "--port" 88)
+CREATE_ARGS=("--cluster" "lp-cluster-$CLUSTER_NAME")
+
+if [ "$CLUSTER_NAME" != "dev" ]; then
+  CREATE_ARGS+=("--port" 88)
 fi
 
 "$DIR/create-kind-cluster.sh" "${CREATE_ARGS[@]}"
