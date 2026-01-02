@@ -3,6 +3,8 @@ kind: HelmRelease
 metadata:
   name: api-gateway-service
   namespace: default
+  annotations:
+    notification.toolkit.fluxcd.io/subscribe: "true"
 spec:
   chart:
     spec:
