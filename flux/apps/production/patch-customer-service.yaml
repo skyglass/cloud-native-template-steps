@@ -6,4 +6,4 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.1.0-BUILD.20260101133914" # {"$imagepolicy": "default:customer-service-image-policy:tag"}
+      version: "0.1.0-BUILD.20260102125452" # {"$imagepolicy": "default:customer-service-image-policy:tag"}
