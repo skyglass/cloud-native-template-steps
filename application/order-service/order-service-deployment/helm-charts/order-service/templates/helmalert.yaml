@@ -6,7 +6,7 @@ metadata:
   namespace: default
 spec:
   providerRef:
-    name: {{ .Values.helmAlert.provider }}
+    name: {{ .Values.helmAlert.provider }}dispatch
   summary: "env=dev"
   eventSeverity: info
   eventSources:
