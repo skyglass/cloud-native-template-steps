@@ -12,5 +12,5 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: application
-      version: "0.1.0-BUILD.20260102113526" # {"$imagepolicy": "default:order-service-image-policy:tag"}
+      version: "0.1.0-BUILD.20260102125452" # {"$imagepolicy": "default:order-service-image-policy:tag"}
   interval: 15s
