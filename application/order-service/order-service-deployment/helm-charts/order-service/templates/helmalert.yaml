@@ -14,5 +14,5 @@ spec:
       name:  {{ include "order-service.fullname" . }}
       namespace: default
   inclusionList:
-    - ".*.upgrade.*succeeded.*"
+    - ".*succeeded.*"
 {{- end }}

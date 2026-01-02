@@ -14,5 +14,5 @@ spec:
       name:  {{ include "customer-service.fullname" . }}
       namespace: default
   inclusionList:
-    - ".*.upgrade.*succeeded.*"
+    - ".*succeeded.*"
 {{- end }}
