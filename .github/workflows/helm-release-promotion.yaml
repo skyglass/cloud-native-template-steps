@@ -1,0 +1,69 @@
+name: fluxcd-promotion
+on:
+  repository_dispatch:
+    types:
+      - HelmRelease/api-gateway-service.default
+      - HelmRelease/customer-service.default
+      - HelmRelease/order-service.default
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    # Start promotion when the dev cluster has successfully
+    # upgraded the Helm release to a new chart version.
+    if: |
+      github.event.client_payload.metadata.summary == 'env=dev' &&
+      github.event.client_payload.severity == 'info'      
+    steps:
+      # Checkout main branch.
+      - uses: actions/checkout@v3
+      # Parse the event metadata to determine the chart version deployed on dev.
+      - name: Get chart version from dev
+        id: dev
+        run: |
+          VERSION=${{ github.event.client_payload.metadata.revision }}
+          NAME=${{ github.event.client_payload.involvedObject.name }}
+          echo ::set-output name=VERSION::${VERSION}          
+          echo ::set-output name=NAME::${NAME}          
+      # Patch the chart version in the production Helm release manifest.
+      - name: Set chart version in production
+        id: production
+        env:
+          CHART_VERSION: ${{ steps.dev.outputs.version }}
+          CHART_NAME: ${{ steps.dev.outputs.name }}
+        run: |
+          echo "set ${CHART_NAME} version to ${CHART_VERSION}"
+          yq eval '.spec.chart.spec.version=env(CHART_VERSION)' -i ./flux/apps/production/patch-${CHART_NAME}.yaml
+      - name: Open promotion PR
+        uses: peter-evans/create-pull-request@v4
+        id: cpr
+        with:
+          token: ${{ secrets.GTHB_TOKEN }}
+          branch-suffix: random
+          delete-branch: true
+          author: Flux promote <skyglass+fluxpromote@skycomposer.net>
+          commit-message: Update production ${{ steps.dev.outputs.name }} to v${{ steps.dev.outputs.version }}
+          title: Promote production  ${{ steps.dev.outputs.name }} to v${{ steps.dev.outputs.version }}
+          body: |
+            Promote production  ${{ steps.dev.outputs.name }} release on production to v${{ steps.dev.outputs.version }}
+      - name: merge PR
+        if: ${{ steps.cpr.outputs.pull-request-number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GTHB_TOKEN }}
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          git config --global user.email "skyglass+fluxpromote@skycomposer.net"
+          git config --global user.name "Flux promote"
+
+          for i in $(seq 1 5) ; do
+            if gh pr merge --merge ${{ steps.cpr.outputs.pull-request-url }} ; then
+              exit 0
+            fi
+            sleep 1
+          done
+
+          exit 1
