@@ -6,6 +6,6 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.1.0-BUILD.20260101133914"
+      version: "0.1.0-BUILD.20260101133914" # {"$imagepolicy": "default:api-gateway-service-image-policy:tag"}
   values:
     replicaCount: 2

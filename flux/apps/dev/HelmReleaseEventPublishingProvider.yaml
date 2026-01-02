@@ -1,10 +1,10 @@
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Provider
 metadata:
-  name: github
+  name: githubdispatch
   namespace: default
 spec:
-  type: github
+  type: githubdispatch
   address: https://github.com/skyglass/cloud-native-template-steps
   secretRef:
     name: github-token
