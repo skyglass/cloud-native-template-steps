@@ -18,8 +18,10 @@ jobs:
       github.event.client_payload.metadata.summary == 'env=dev' &&
       github.event.client_payload.severity == 'info'      
     steps:
-      # Checkout main branch.
+      # Checkout config branch.
       - uses: actions/checkout@v3
+        with:
+          ref: config
       # Parse the event metadata to determine the chart version deployed on dev.
       - name: Get chart version from dev
         id: dev
