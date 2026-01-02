@@ -12,6 +12,7 @@ spec:
   eventSources:
     - kind: HelmRelease
       name:  {{ include "customer-service.fullname" . }}
+      namespace: default
   inclusionList:
     - ".*.upgrade.*succeeded.*"
 {{- end }}
