@@ -8,7 +8,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.1.0-BUILD.20260102165107" # {"$imagepolicy": "default:order-service-image-policy:tag"}
+      version: "0.1.0-BUILD.20260103161638" # {"$imagepolicy": "default:order-service-image-policy:tag"}
   values:
     imageUpdateAutomation:
       enabled: true
