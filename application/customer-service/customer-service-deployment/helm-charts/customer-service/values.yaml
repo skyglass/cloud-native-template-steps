@@ -115,7 +115,9 @@ postgresConnection:
 authorizationServer:
   endpoint: authorization-server:9000
 
-env: []
+env:
+  - name: DUMMY
+    value: DUMMY_1697210278
 
 imageUpdateAutomation:
   enabled: false
