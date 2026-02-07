@@ -6,7 +6,7 @@ module "eks" {
 
   # https://github.com/gavinbunney/terraform-provider-kubectl/issues/270
   # cluster_version = "1.27"
-  cluster_version = "1.26"
+  cluster_version = "1.34"
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
