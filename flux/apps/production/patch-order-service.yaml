@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: order-service
@@ -6,9 +6,4 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.1.0-BUILD.20231104051348"
-  values:
-    service:
-      enabled: false
-    canary:
-      enabled: true
+      version: "0.1.0-BUILD.20260106151635"

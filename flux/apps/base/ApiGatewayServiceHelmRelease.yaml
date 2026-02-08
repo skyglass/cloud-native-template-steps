@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: api-gateway-service
-      version: "0.1.0-BUILD.20260102165107" # {"$imagepolicy": "default:api-gateway-service-image-policy:tag"}
+      version: "0.1.0-BUILD.20260103161638" # {"$imagepolicy": "default:api-gateway-service-image-policy:tag"}
       sourceRef:
         kind: HelmRepository
         name: application
