@@ -53,7 +53,7 @@ target/
 .project
 .springBeans
 src/main/resources/static/
-secrets/
+secrets/**
 
 terraform-eks/.terraform/**
 terraform-eks/.terraform.lock.hcl
