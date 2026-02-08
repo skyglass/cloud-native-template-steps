@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-CLUSTER_NAME=lp-cluster
+CLUSTER_NAME=lp2-cluster
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -59,7 +59,7 @@ kubectl wait --namespace ingress-nginx \
   --timeout=90s
 
 REGISTRY_DIR="/etc/containerd/certs.d/localhost:${reg_port}"
-for node in $(kind get nodes --name lp-cluster); do
+for node in $(kind get nodes --name lp2-cluster); do
   echo configuring $node
   docker exec "${node}" mkdir -p "${REGISTRY_DIR}"
   cat <<EOF | docker exec -i "${node}" cp /dev/stdin "${REGISTRY_DIR}/hosts.toml"

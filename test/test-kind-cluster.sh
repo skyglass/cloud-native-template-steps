@@ -2,8 +2,8 @@
 
 verify_context() {
   context=$(kubectl config current-context)
-  if [ "$context" != "kind-lp-cluster" ]; then
-    echo "Error: current context is not kind-lp-cluster" context
+  if [ "$context" != "kind-lp2-cluster" ]; then
+    echo "Error: current context is not kind-lp2-cluster" context
     exit 1
   fi
 }
