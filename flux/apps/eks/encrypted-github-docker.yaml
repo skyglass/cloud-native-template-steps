@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-    token: ENC[AES256_GCM,data:s4LdyBZLAed1TNFnex4Kvu6ZbPmxzLAglTtZN8dg5ijj2VChFzZAwlzDkWVWN8pH6utDJxUFu84=,iv:7x+ICCCG+JsnmdzOzLfLJhbkTVNlwTT/sbRQHFSnHiY=,tag:dqlEJ9gOVlOX8PsxAh+gHA==,type:str]
+    token: ENC[AES256_GCM,data:whlxN58nLubuJlfOUSfnvMPSA5RY2AZOQzUIpuEod3aVFA/Z5+tHvYguRazrr4jofVGxo2i0NPU=,iv:7HAGd+t7bXLVlGizAjX9efWPmUaOA66CMk+mqlFxU/0=,tag:fBlBQCyjOmBxeVPQzg5New==,type:str]
 kind: Secret
 metadata:
     name: github-token
@@ -9,13 +9,13 @@ sops:
         - recipient: age1tp8dzw8qevk4ez9spk6frm2hld8ka8gld5drw283h4yyutjkqqfqfavj7k
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0ekV4dmtFajk1bit0b0Jt
-            aEJkTEpTSERvbWRGcjB0TnNWaExrUXlHYVdZCk9ZYldRK3d4bVpMZlZ6RDcyRVdn
-            Y25rd1VZeElGeUJ0QVNHaEpNbU5qU1kKLS0tIFFLdCtTdVNSTjFHSVNGSTdBTm0z
-            Rm5kc3Q3aUVXb3VWSExWU0Z3cWwvMGMKDBKJ1oqU2ekZfE17KKODK81xU3QtlvY+
-            xDpfgJ+JbTuX1E1fsUzBrK3Rm/CL0pvMfyH+v5fZEaQoyAYNkddHrw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBWQVRzdzQ3b0ZoSFRCK0Mr
+            WG12Y09iNURJbzdYS0FsNlUwbDRvbHRUVG5NCjVHdDhNREluN0VMenI2c2xRMUY5
+            Uk5kSVJSNzNNSUxYSlNQZkcyZng5VGsKLS0tIDFRdzBSVkVObHNzTkxtTHJQWmtu
+            SFpxc3ExZlZ4dW5mSGMvaVpwS0ZGbEEKzt0wFxVNrEOTrjNNTPrFk0OWSjRv9Tv5
+            adZXL805Y1AyYYtLyBHKp4pswa4gxxHv2PdQhRC1na8SCnEXMcEP0A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-02-08T18:34:14Z"
-    mac: ENC[AES256_GCM,data:hfdnV3w1Yln9kX6fiF844hlMr1EeGwwM4Bb+lipacI1y1VxyNerLKo3KWH9N05L9fFClmdMWD5JXCfTJYTPZ3O2QhaJhYZEEPJ8/+OXGPkjzQvX+tM6xKlkZw8tJWCv7mtq63XcTaMagr9jv0voWM8km8PUMs7J8dpvBAvTXJbc=,iv:2Tv6BWz/xZ9fmaMQ0E+O5DNEdOX0THYY3482cGaNLrI=,tag:xjzzuv5BnyEDTQAr2Sd6aQ==,type:str]
+    lastmodified: "2026-02-08T18:36:38Z"
+    mac: ENC[AES256_GCM,data:uCMcH1K1VfF1F6Qfo+nFFRg1yzh2M4UstAqwnVrJPfbBOgO5IBvjhD2zVWnAsPnoAjRb5L3UoylimQP0/lrANXwYSsNoPg0YalNbO5+5TqIi9Q+rctF3XDYda48/iiXgSkpDiCGwq1qHXp9VBDoaGI5NsawbXNcniEcESeuZy0E=,iv:1nubh2itmzXSbniUdj4HjcmlGxJz3hSuHFCdfvoKNAk=,tag:a+PbvDrlO+Wsh8dvtHnb6w==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.11.0
