@@ -21,7 +21,7 @@ while [ $# -gt 0 ] ; do
 done
 
 if [ -z "$SKIP_TERRAFORM_APPLY" ] ; then
-  $MANAGE_DIR/run-terraform.sh apply -auto-approve
+  "$MANAGE_DIR"/run-terraform.sh apply -auto-approve
 fi
 
 eval "$($MANAGE_DIR/run-terraform.sh output -raw update_config_command)"
@@ -56,3 +56,7 @@ run_nginx() {
 }
 
 run_nginx
+
+"$MANAGE_DIR"/bootstrap-flux-eks.sh
+"$MANAGE_DIR"/wait-for-ready-pods.sh 
+"$DIR"/run-production-eks-end-to-end-tests.sh

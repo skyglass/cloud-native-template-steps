@@ -3,6 +3,7 @@
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 CLUSTER_NAME=dev
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CLUSTER_TYPE=kind
 
 while [ ! -z "$*" ] ; do
   case $1 in
@@ -14,6 +15,10 @@ while [ ! -z "$*" ] ; do
       shift
       CLUSTER_NAME=$1
       ;;
+    "--cluster-type" )
+      shift
+      CLUSTER_TYPE=$1
+      ;;
     * )
       echo ./bootstrap-flux.sh --branch branchName
       exit 0
@@ -22,15 +27,18 @@ while [ ! -z "$*" ] ; do
   shift
 done
 
-CREATE_ARGS=("--cluster" "lp-cluster-$CLUSTER_NAME")
+if [ "$CLUSTER_TYPE" == "kind" ]; then
+  if [ "$CLUSTER_NAME" == "dev" ] ; then
+    CREATE_ARGS=()
+  else
+    CREATE_ARGS=("--cluster" "lp2-cluster-$CLUSTER_NAME" "--port" 88)
+  fi
 
-if [ "$CLUSTER_NAME" != "dev" ]; then
-  CREATE_ARGS+=("--port" 88)
+  "$DIR/create-kind-cluster.sh" "${CREATE_ARGS[@]}"
 fi
 
-"$DIR/create-kind-cluster.sh" "${CREATE_ARGS[@]}"
 
-git pull
+git pull 
 
 "$DIR/encrypt-secrets.sh"  "${CLUSTER_NAME}"
 

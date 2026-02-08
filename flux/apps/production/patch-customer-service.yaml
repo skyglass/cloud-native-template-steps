@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: customer-service
@@ -6,4 +6,13 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.1.0-BUILD.20260102165107"
+      version: "0.1.0-BUILD.20231104052113"
+  values:
+    service:
+      enabled: false
+      # Useful for debugging on this branch. But conflicts with chart's env var.
+      #    env:
+      #      - name: DUMMY
+      #        value: DUMMY_SHOULD_BE_QUOTED_20240815130048
+    canary:
+      enabled: true

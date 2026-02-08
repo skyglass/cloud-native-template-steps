@@ -1,0 +1,19 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: ingress-nginx
+  namespace: default
+spec:
+  interval: 30s
+  # dependsOn:
+    # temporary disabled
+    # - name: linkerd
+    #   namespace: flux-system
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  path: ./flux/ingress-nginx/eks
+  prune: true
+  wait: true
+  timeout: 240s

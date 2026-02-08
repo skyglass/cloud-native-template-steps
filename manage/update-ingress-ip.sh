@@ -13,6 +13,19 @@ if [ ${#tf_files_array[@]} -eq 0 ]; then
   exit 1
 fi
 
-sd '[1-9][0-9]{0,3}\.[0-9]{1,4}\.[0-9]{1,4}\.[0-9]{1,4}/32' "$(curl -s http://checkip.amazonaws.com)/32" "${tf_files_array[@]}"
+yaml_files_array=()
+while IFS= read -r file; do
+  yaml_files_array+=("$file")
+done < <(find flux -type f -name "*.yaml" -o -name "*.yml")
+
+if [ ${#yaml_files_array[@]} -eq 0 ]; then
+  echo "Error: Failed to find .y*ml files in flux directory"
+  exit 1
+fi
+
+
+# rest of the script
+
+sd '[1-9][0-9]{0,3}\.[0-9]{1,4}\.[0-9]{1,4}\.[0-9]{1,4}/32' "$(curl -s http://checkip.amazonaws.com)/32"  "${tf_files_array[@]}" "${yaml_files_array[@]}"
 
 git diff HEAD

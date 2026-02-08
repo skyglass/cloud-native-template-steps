@@ -6,9 +6,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.1.0-BUILD.20231104051348"
+      version: "0.1.0-BUILD.20231102153425"
   values:
     service:
-      enabled: false
-    canary:
-      enabled: true
+      enabled: true # No canary

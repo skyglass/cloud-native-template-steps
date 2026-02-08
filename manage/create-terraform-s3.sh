@@ -2,7 +2,7 @@
 
 aws s3 mb s3://lp-terraform-state.skycomposer.net
 
-aws s3api put-bucket-versioning --bucket lp-terraform-state.chrisrichardson.net --versioning-configuration Status=Enabled
+aws s3api put-bucket-versioning --bucket lp-terraform-state.skycomposer.net --versioning-configuration Status=Enabled
 
 aws dynamodb create-table --table-name lp-terraform-state-lock.skycomposer.net \
     --attribute-definitions AttributeName=LockID,AttributeType=S \

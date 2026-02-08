@@ -1,0 +1,36 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: api-gateway-service
+  namespace: default
+spec:
+  chart:
+    spec:
+      version: "0.1.0-BUILD.20231102153425"
+  values:
+    replicaCount: 1
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/service-upstream: "true"
+      hosts:
+        - paths:
+          - path: /customers
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway-service
+          - path: /orders
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway-service
+          - path: /swagger
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway-service
+          - path: /swagger-ui
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway-service

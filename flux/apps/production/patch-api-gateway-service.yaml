@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: api-gateway-service
@@ -8,4 +8,9 @@ spec:
     spec:
       version: "0.1.0-BUILD.20260102165107"
   values:
-    replicaCount: 2
+    replicaCount: 1
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/service-upstream: "true"
+    canary:
+      enabled: true
