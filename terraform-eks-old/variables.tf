@@ -3,5 +3,5 @@
 variable "ingress_cidrs" {
     description = "List of CIDR blocks that can access the EKS cluster and Ingress"
     type    = list(string)
-    default = ["94.139.28.180/32"]
+    default = ["94.139.29.51/32"]
 }

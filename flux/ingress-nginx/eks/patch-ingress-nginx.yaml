@@ -9,4 +9,4 @@ spec:
       service:
         type: LoadBalancer
         loadBalancerSourceRanges:
-          - "94.139.28.180/32"
+          - "94.139.29.51/32"

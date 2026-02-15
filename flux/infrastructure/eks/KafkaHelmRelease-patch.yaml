@@ -1,0 +1,11 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kafka
+  namespace: default
+spec:
+  values:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClassName: gp2
