@@ -7,4 +7,16 @@ patches:
   - target:
       kind: HelmRelease
       name: kafka
-    path: ./KafkaHelmRelease-patch.yaml
+    patch: |
+      spec:
+        values:
+          kafka:
+            persistence:
+              enabled: true
+              size: 10Gi
+              storageClassName: kafka-sc
+          zookeeper:
+            persistence:
+              enabled: true
+              size: 5Gi
+              storageClassName: kafka-sc
