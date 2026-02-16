@@ -5,7 +5,9 @@ metadata:
   namespace: default
 spec:
   values:
-    persistence:
-      enabled: true
-      size: 10Gi
-      storageClassName: kafka-sc
+    kafka:
+      persistence:
+        storageClassName: kafka-sc
+    zookeeper:
+      persistence:
+        storageClassName: kafka-sc

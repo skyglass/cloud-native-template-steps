@@ -4,4 +4,7 @@ resources:
   - kafka-storage.yaml
   - ../base
 patches:
-  - path: ./KafkaHelmRelease-patch.yaml
+  - target:
+      kind: HelmRelease
+      name: kafka
+    path: ./KafkaHelmRelease-patch.yaml
