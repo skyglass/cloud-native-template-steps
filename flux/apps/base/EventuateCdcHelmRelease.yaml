@@ -19,7 +19,7 @@ spec:
   values:
     cdc:
       envFroms: []
-      # zookeeper: kafka-zookeeper
+      zookeeper: kafka-zookeeper
       kafka: kafka
       databaseServers:
         - customer-service-postgres:
