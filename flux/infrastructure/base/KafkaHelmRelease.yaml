@@ -7,20 +7,18 @@ spec:
   chart:
     spec:
       chart: kafka
+      reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: eventuate
       version: "v0.4.0"
-      reconcileStrategy: ChartVersion
   interval: 15s
   values:
     kafka:
       persistence:
         enabled: true
         size: 10Gi
-        storageClass: kafka-sc
     zookeeper:
       persistence:
         enabled: true
         size: 5Gi
-        storageClass: kafka-sc
