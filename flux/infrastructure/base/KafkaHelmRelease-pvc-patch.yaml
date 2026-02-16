@@ -1,13 +1,22 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
-  name: kafka
-  namespace: default
+  name: my-kafka
 spec:
-  values:
-    kafka:
-      persistence:
-        storageClass: kafka-sc
-    zookeeper:
-      persistence:
-        storageClass: kafka-sc
+  volumeClaimTemplates:
+    - metadata:
+        name: my-kafka-persistent-storage
+      spec:
+        storageClassName: kafka-sc
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-kafka-zookeeper
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: my-kafka-zookeeper-persistent-storage
+      spec:
+        storageClassName: kafka-sc
