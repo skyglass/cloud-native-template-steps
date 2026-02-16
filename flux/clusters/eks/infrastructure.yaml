@@ -9,7 +9,7 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./flux/infrastructure/eks
+  path: ./flux/infrastructure/base
   prune: true
   wait: true
   timeout: 240s
