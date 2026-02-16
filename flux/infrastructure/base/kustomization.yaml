@@ -5,3 +5,8 @@ resources:
   - AuthorizationServerHelmRelease.yaml
   - KafkaHelmRelease.yaml
   - EventuateHelmRepository.yaml
+patches:
+  - path: ./KafkaHelmRelease-pvc-patch.yaml
+    target:
+      kind: HelmRelease
+      name: kafka
