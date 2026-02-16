@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - AuthorizationServerHelmRelease.yaml
   - EventuateHelmRepository.yaml
-  - KafkaHelmRelease.yaml
+  # - KafkaHelmRelease.yaml

@@ -55,8 +55,4 @@ target/
 src/main/resources/static/
 secrets/**
 
-terraform-eks-old/.terraform/**
-terraform-eks-old/.terraform.lock.hcl
-terraform-eks-old/terraform.tfstate
-
 ### Test ##

@@ -1,20 +1,35 @@
-module "eks" {
-  source = "./module-eks"
+locals {
+  name   = "lp2-cluster"
+  region = "eu-central-1"
 
-  region                 = var.aws_region
-  author                 = "skyglass"
-  cluster_name           = var.cluster_name
+  tags = {
+    lp_cluster = local.name
+  }
 }
 
-module "app" {
-  source                                           = "./module-app"
+terraform {
+  required_version = ">= 1.3"
 
-  region                                           = var.aws_region
-  environment                                      = var.environment
-  cluster_id                                       = module.eks.cluster_id
-  cluster_name                                     = module.eks.cluster_name
-  vpc_id                                           = module.eks.vpc_id
-  vpc_cidr_block                                   = module.eks.vpc_cidr_block
-  vpc_public_subnets                               = module.eks.vpc_public_subnets
-  vpc_public_subnets_count                         = module.eks.vpc_public_subnets_count
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.25"
+    }
+  }
+
+  backend "s3" {
+    bucket         = "lp-terraform-state.skycomposer.net"
+    key            = "lp-terraform-eks-lp2-cluster"
+    region         = "eu-central-1"
+    dynamodb_table = "lp-terraform-state-lock.skycomposer.net"
+  }
+}
+
+provider "aws" {
+  region = local.region
 }

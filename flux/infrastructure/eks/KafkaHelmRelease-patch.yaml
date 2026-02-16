@@ -8,4 +8,4 @@ spec:
     persistence:
       enabled: true
       size: 10Gi
-      storageClassName: gp2
+      storageClassName: kafka-sc
