@@ -13,3 +13,8 @@ spec:
         name: eventuate
       version: "v0.4.0"
   interval: 15s
+  values:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClassName: kafka-sc
