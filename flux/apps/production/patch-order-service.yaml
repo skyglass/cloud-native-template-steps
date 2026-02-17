@@ -6,4 +6,4 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.1.0-BUILD.20260106151635"
+      version: "0.1.0-BUILD.20260208183337"

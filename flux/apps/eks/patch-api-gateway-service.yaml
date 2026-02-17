@@ -6,7 +6,7 @@ metadata:
 spec:
   chart:
     spec:
-      version: "0.1.0-BUILD.20231102153425"
+      version: "0.1.0-BUILD.20260208183337"
   values:
     replicaCount: 1
     ingress:
