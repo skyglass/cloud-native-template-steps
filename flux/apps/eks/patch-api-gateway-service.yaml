@@ -3,44 +3,34 @@ kind: HelmRelease
 metadata:
   name: api-gateway-service
   namespace: default
-  annotations:
-    notification.toolkit.fluxcd.io/subscribe: "true"
 spec:
   chart:
     spec:
       version: "0.1.0-BUILD.20260208183337"
   values:
     replicaCount: 1
-    imageUpdateAutomation:
-      enabled: true
-      image: ghcr.io/skyglass/cloud-native-template-steps/charts/api-gateway-service
-      policy:
-        semver:
-          range: ">0.1.0-BUILD <0.2.0-BUILD"
-    helmAlert:
-      enabled: true
     ingress:
       annotations:
         nginx.ingress.kubernetes.io/service-upstream: "true"
       hosts:
         - paths:
-          - path: /customers
-            pathType: Prefix
-            backend:
-              service:
-                name: api-gateway-service
-          - path: /orders
-            pathType: Prefix
-            backend:
-              service:
-                name: api-gateway-service
-          - path: /swagger
-            pathType: Prefix
-            backend:
-              service:
-                name: api-gateway-service
-          - path: /swagger-ui
-            pathType: Prefix
-            backend:
-              service:
-                name: api-gateway-service
+            - path: /customers
+              pathType: Prefix
+              backend:
+                service:
+                  name: api-gateway-service
+            - path: /orders
+              pathType: Prefix
+              backend:
+                service:
+                  name: api-gateway-service
+            - path: /swagger
+              pathType: Prefix
+              backend:
+                service:
+                  name: api-gateway-service
+            - path: /swagger-ui
+              pathType: Prefix
+              backend:
+                service:
+                  name: api-gateway-service

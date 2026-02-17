@@ -1,20 +1,12 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: customer-service
   namespace: default
-  annotations:
-    notification.toolkit.fluxcd.io/subscribe: "true"
 spec:
   chart:
     spec:
-      version: "0.1.0-BUILD.20260208183337" # {"$imagepolicy": "default:customer-service-image-policy:tag"}
+      version: "0.1.0-BUILD.20260208183337"
   values:
-    imageUpdateAutomation:
-      enabled: true
-      image: ghcr.io/skyglass/cloud-native-template-steps/charts/customer-service
-      policy:
-        semver:
-          range: ">0.1.0-BUILD <0.2.0-BUILD"
-    helmAlert:
-      enabled: true
+    service:
+      enabled: true # No canary
