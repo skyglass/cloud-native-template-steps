@@ -6,4 +6,4 @@ metadata:
   namespace: default
 spec:
   interval: 60s
-  url: https://eventuate-platform.github.io/eventuate-helm-charts
+  url: https://raw.githubusercontent.com/eventuate-platform/eventuate-helm-charts/helm-repository
