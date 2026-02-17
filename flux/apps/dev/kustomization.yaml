@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: default
 resources:
   - ../base
-  - ImageUpdateAutomation.yaml
+  - ../base/ImageUpdateAutomation.yaml
   - ./encrypted-github-docker.yaml
   - ./encrypted-docker-secret.yaml
   - ./HelmReleaseEventPublishingProvider.yaml
