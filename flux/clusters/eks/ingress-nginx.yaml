@@ -5,10 +5,8 @@ metadata:
   namespace: default
 spec:
   interval: 30s
-  # dependsOn:
-    # temporary disabled
-    # - name: linkerd
-    #   namespace: flux-system
+  dependsOn:
+    - name: infrastructure
   sourceRef:
     kind: GitRepository
     name: flux-system

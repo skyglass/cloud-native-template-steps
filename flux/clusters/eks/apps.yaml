@@ -10,7 +10,7 @@ spec:
     secretRef:
       name: sops-age
   dependsOn:
-    - name: infrastructure
+    - name: ingress-nginx
   sourceRef:
     kind: GitRepository
     name: flux-system
