@@ -11,6 +11,7 @@ spec:
       name: sops-age
   dependsOn:
     - name: ingress-nginx
+    - namespace: ingress-nginx
   sourceRef:
     kind: GitRepository
     name: flux-system
